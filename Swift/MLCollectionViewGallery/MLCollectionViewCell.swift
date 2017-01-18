@@ -16,7 +16,7 @@ class MLCollectionViewCell: UICollectionViewCell {
         
         theImageView = UIImageView()
         theImageView.translatesAutoresizingMaskIntoConstraints = false
-        theImageView.contentMode = .ScaleToFill
+        theImageView.contentMode = .scaleToFill
         
         super.init(frame: frame)
         
@@ -24,9 +24,9 @@ class MLCollectionViewCell: UICollectionViewCell {
         
         let views = ["theImageView": theImageView]
         
-        var constraints = NSLayoutConstraint.constraintsWithVisualFormat("|[theImageView]|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|[theImageView]|", options: [], metrics: nil, views: views)
-        NSLayoutConstraint.activateConstraints(constraints)
+        var constraints = NSLayoutConstraint.constraints(withVisualFormat: "|[theImageView]|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[theImageView]|", options: [], metrics: nil, views: views)
+        NSLayoutConstraint.activate(constraints)
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -10,16 +10,16 @@ import UIKit
 
 class ImagesViewController: UIViewController {
     
-    private var collectionView: UICollectionView?
-    private var pageControl: UIPageControl?
+    fileprivate var collectionView: UICollectionView?
+    fileprivate var pageControl: UIPageControl?
     
-    private var images = [UIImage]()
+    fileprivate var images = [UIImage]()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .whiteColor()
+        view.backgroundColor = .white
         
         for i in 1...6 {
             guard let image = UIImage(named: "\(i).jpg") else { continue }
@@ -27,28 +27,28 @@ class ImagesViewController: UIViewController {
         }
         
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .Horizontal
+        flowLayout.scrollDirection = .horizontal
         flowLayout.minimumInteritemSpacing = 0.0
         flowLayout.minimumLineSpacing = 0.0
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         guard let collectionView = collectionView else { fatalError("we need a collection view!") }
-        collectionView.backgroundColor = .whiteColor()
+        collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.pagingEnabled = true
-        collectionView.registerClass(MLCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.isPagingEnabled = true
+        collectionView.register(MLCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.showsHorizontalScrollIndicator = false
         
         pageControl = UIPageControl()
         guard let pageControl = pageControl else { fatalError("we need a pageControl") }
         pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.tintColor = UIColor.blueColor()
+        pageControl.tintColor = UIColor.blue
         pageControl.numberOfPages = images.count
         pageControl.currentPage = 0
-        pageControl.pageIndicatorTintColor = .lightGrayColor()
-        pageControl.currentPageIndicatorTintColor = .blackColor()
+        pageControl.pageIndicatorTintColor = .lightGray
+        pageControl.currentPageIndicatorTintColor = .black
         
         
         view.addSubview(collectionView)
@@ -56,9 +56,9 @@ class ImagesViewController: UIViewController {
         
         let views = ["collectionView": collectionView, "pageControl": pageControl]
         
-        var constraints = NSLayoutConstraint.constraintsWithVisualFormat("|[collectionView]|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|[collectionView]-[pageControl]-|", options: [.AlignAllLeading, .AlignAllTrailing], metrics: nil, views: views)
-        NSLayoutConstraint.activateConstraints(constraints)
+        var constraints = NSLayoutConstraint.constraints(withVisualFormat: "|[collectionView]|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[collectionView]-[pageControl]-|", options: [.alignAllLeading, .alignAllTrailing], metrics: nil, views: views)
+        NSLayoutConstraint.activate(constraints)
         
         
         
@@ -67,27 +67,27 @@ class ImagesViewController: UIViewController {
 }
 
 extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return images.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as? MLCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? MLCollectionViewCell else { return UICollectionViewCell() }
         cell.theImageView.image = images[indexPath.row]
         
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.bounds.size
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let collectionView = collectionView else { fatalError("we need a collection view!") }
         let visibleRect = CGRect(origin: collectionView.contentOffset, size: collectionView.bounds.size)
-        let visiblePoint = CGPoint(x: CGRectGetMidX(visibleRect), y: CGRectGetMidY(visibleRect))
-        if let visibleIndexPath = collectionView.indexPathForItemAtPoint(visiblePoint) {
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+        if let visibleIndexPath = collectionView.indexPathForItem(at: visiblePoint) {
             pageControl?.currentPage = visibleIndexPath.row
         }
         
